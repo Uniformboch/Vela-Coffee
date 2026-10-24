@@ -1,0 +1,9 @@
+{
+  "name": "vela-coffee-menu",
+  "private": true,
+  "type": "module",
+  "description": "Menú digital de Vela Coffee con pedidos por WhatsApp",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\""
+  }
+}

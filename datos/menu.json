@@ -1,0 +1,131 @@
+{
+  "config": { "negocio": "Vela Coffee", "whatsapp": "524771358745" },
+  "tamanos": {
+    "C": { "nombre": "Caliente" },
+    "F": { "nombre": "Frío" }
+  },
+  "extras": [
+    { "id": "leche-vegetal", "nombre": "Leche vegetal", "precio": 12 },
+    { "id": "lata", "nombre": "Cambio de vaso a lata", "precio": 12, "tamanos": ["F", "unico"] },
+    { "id": "pollo-extra", "nombre": "Pollo extra", "precio": 25 },
+    { "id": "huevo-extra", "nombre": "Huevo extra", "precio": 25 },
+    { "id": "pavo-extra", "nombre": "Pavo extra", "precio": 25 },
+    { "id": "queso-extra", "nombre": "Queso extra", "precio": 25 },
+    { "id": "aguacate-extra", "nombre": "Aguacate extra", "precio": 20 },
+    { "id": "chorizo-extra", "nombre": "Chorizo extra", "precio": 20 }
+  ],
+  "categorias": [
+    {
+      "id": "clasicas", "nombre": "Clásicas", "grupo": "bebidas",
+      "extrasPermitidos": ["leche-vegetal", "lata"],
+      "productos": [
+        { "id": "espresso", "nombre": "Espresso", "precios": { "C": 40 }, "extrasPermitidos": ["lata"] },
+        { "id": "americano", "nombre": "Americano", "precios": { "C": 45, "F": 55 }, "extrasPermitidos": ["lata"] },
+        { "id": "latte", "nombre": "Latte", "precios": { "C": 58, "F": 68 } },
+        { "id": "latte-vainilla", "nombre": "Latte vainilla", "precios": { "C": 68, "F": 78 } },
+        { "id": "mint-latte", "nombre": "Mint Latte", "precios": { "F": 78 } },
+        { "id": "horchata-latte", "nombre": "Horchata latte", "precios": { "F": 78 } },
+        { "id": "capuccino", "nombre": "Capuccino", "precios": { "C": 58, "F": 68 } },
+        { "id": "moka", "nombre": "Moka", "precios": { "C": 68, "F": 78 } },
+        { "id": "chocolate", "nombre": "Chocolate", "precios": { "C": 58, "F": 68 } }
+      ]
+    },
+    {
+      "id": "special-drinks", "nombre": "Special Drinks", "grupo": "bebidas",
+      "extrasPermitidos": ["leche-vegetal", "lata"],
+      "productos": [
+        { "id": "matcha", "nombre": "Matcha", "precios": { "C": 68, "F": 78 } },
+        { "id": "taro", "nombre": "Taro", "precios": { "C": 68, "F": 78 } },
+        { "id": "golden-milk", "nombre": "Golden Milk", "precios": { "C": 68, "F": 78 } },
+        { "id": "chai", "nombre": "Chai", "precios": { "C": 68, "F": 78 } },
+        { "id": "dirty-chai", "nombre": "Dirty Chai", "precios": { "C": 78 } },
+        { "id": "cafe-filtrado-v60", "nombre": "Café Filtrado V60", "precios": { "C": 98 }, "extrasPermitidos": ["lata"] },
+        { "id": "smoothie-frutos-rojos", "nombre": "Smoothie Frutos Rojos", "precios": { "F": 78 }, "extrasPermitidos": ["lata"] }
+      ]
+    },
+    {
+      "id": "cold-foam", "nombre": "Cold Foam Drinks", "grupo": "bebidas",
+      "extrasPermitidos": ["leche-vegetal", "lata"],
+      "productos": [
+        { "id": "cloud-matcha-coconut", "nombre": "Cloud Matcha Coconut", "precios": { "unico": 98 } },
+        { "id": "cloud-taro-coconut", "nombre": "Cloud Taro Coconut", "precios": { "unico": 98 } },
+        { "id": "cloud-mango-coconut", "nombre": "Cloud Mango Coconut", "precios": { "unico": 98 } },
+        { "id": "vainilla-foam-latte", "nombre": "Vainilla Foam Latte", "precios": { "unico": 88 } },
+        { "id": "banana-foam-latte", "nombre": "Banana Foam Latte", "precios": { "unico": 88 } },
+        { "id": "lotus-foam-latte", "nombre": "Lotus Foam Latte", "precios": { "unico": 88 } },
+        { "id": "strawberry-matcha", "nombre": "Strawberry Matcha", "precios": { "unico": 98 } }
+      ]
+    },
+    {
+      "id": "to-go", "nombre": "To Go", "grupo": "bebidas",
+      "extrasPermitidos": ["lata"],
+      "productos": [
+        { "id": "cold-brew", "nombre": "Cold Brew", "precios": { "unico": 68 } },
+        { "id": "choco-chia", "nombre": "Choco Chía", "precios": { "unico": 68 }, "extrasPermitidos": ["leche-vegetal", "lata"] },
+        { "id": "smoothie-mango-chamoy", "nombre": "Smoothie Mango Chamoy", "precios": { "unico": 68 } },
+        { "id": "espresso-tonic", "nombre": "Espresso tonic", "precios": { "unico": 88 } },
+        { "id": "mint-vela", "nombre": "Mint Vela", "precios": { "unico": 78 }, "extrasPermitidos": ["leche-vegetal", "lata"] },
+        { "id": "strawberry-latte", "nombre": "Strawberry Latte", "precios": { "unico": 88 }, "extrasPermitidos": ["leche-vegetal", "lata"] },
+        { "id": "velvet-matcha", "nombre": "Velvet Matcha", "precios": { "unico": 98 }, "extrasPermitidos": ["leche-vegetal", "lata"] }
+      ]
+    },
+    {
+      "id": "otros", "nombre": "Otros", "grupo": "bebidas",
+      "productos": [
+        { "id": "limonada", "nombre": "Limonada", "precios": { "unico": 48 }, "extrasPermitidos": ["lata"] },
+        { "id": "refresco", "nombre": "Refresco", "precios": { "unico": 35 } },
+        { "id": "tisana", "nombre": "Tisana", "precios": { "unico": 58 } }
+      ]
+    },
+    {
+      "id": "healthy", "nombre": "Healthy", "grupo": "comida",
+      "extrasPermitidos": ["pollo-extra", "huevo-extra", "pavo-extra", "queso-extra", "aguacate-extra", "chorizo-extra"],
+      "productos": [
+        { "id": "avena-hidratada", "nombre": "Avena Hidratada", "descripcion": "Acompañada con chía y frutos rojos.", "precios": { "unico": 68 }, "extrasPermitidos": [] },
+        { "id": "avocado-toast", "nombre": "Avocado Toast", "descripcion": "Pan de masa madre, aguacate, huevo y costra de queso cheddar.", "precios": { "unico": 108 } },
+        { "id": "ensalada-thai", "nombre": "Ensalada Thai", "descripcion": "Mezcla de hojas verdes, zanahoria, col morada, jitomate cherry, cacahuate y aderezo de jengibre, con pollo a la plancha.", "precios": { "unico": 108 } }
+      ]
+    },
+    {
+      "id": "bocados-vela", "nombre": "Bocados Vela", "grupo": "comida",
+      "extrasPermitidos": ["pollo-extra", "huevo-extra", "pavo-extra", "queso-extra", "aguacate-extra", "chorizo-extra"],
+      "productos": [
+        { "id": "sandwich-ligero", "nombre": "Sándwich ligero", "descripcion": "Pan de masa madre, pechuga de pollo o pavo, acompañado de ensalada.", "precios": { "unico": 118 },
+          "opciones": [ { "id": "proteina", "nombre": "Proteína",
+            "valores": [ { "id": "pollo", "nombre": "Pollo" }, { "id": "pavo", "nombre": "Pavo" } ] } ] },
+        { "id": "sandwich-vela", "nombre": "Sándwich Vela", "descripcion": "Pan brioche, pechuga de pollo o pavo, acompañado de chips de papa.", "precios": { "unico": 118 },
+          "opciones": [ { "id": "proteina", "nombre": "Proteína",
+            "valores": [ { "id": "pollo", "nombre": "Pollo" }, { "id": "pavo", "nombre": "Pavo" } ] } ] },
+        { "id": "molletes", "nombre": "Molletes", "detalle": "2 pz", "descripcion": "Molletes con chorizo y pico de gallo.", "precios": { "unico": 88 } },
+        { "id": "croissant-huevo-tocino", "nombre": "Croissant de Huevo con Tocino", "descripcion": "Acompañado con arúgula y aguacate.", "precios": { "unico": 88 } }
+      ]
+    },
+    {
+      "id": "chilaquiles-vela", "nombre": "Chilaquiles Vela", "grupo": "comida",
+      "extrasPermitidos": ["pollo-extra", "huevo-extra", "pavo-extra", "queso-extra", "aguacate-extra", "chorizo-extra"],
+      "productos": [
+        { "id": "chilaquiles-sencillos", "nombre": "Chilaquiles Sencillos", "descripcion": "Salsa a tu elección (verde o roja) acompañados de frijoles refritos, terminados con crema, queso fresco, cilantro y cebolla.", "precios": { "unico": 88 },
+          "opciones": [ { "id": "salsa", "nombre": "Salsa",
+            "valores": [ { "id": "verde", "nombre": "Salsa verde" }, { "id": "roja", "nombre": "Salsa roja" } ] } ] },
+        { "id": "chilaquiles-con-proteina", "nombre": "Chilaquiles con proteína", "descripcion": "Salsa a tu elección (verde o roja), acompañados de frijoles refritos y tu proteína favorita: pollo o huevo, terminados con crema, queso fresco, cilantro y cebolla.", "precios": { "unico": 118 },
+          "opciones": [
+            { "id": "salsa", "nombre": "Salsa",
+              "valores": [ { "id": "verde", "nombre": "Salsa verde" }, { "id": "roja", "nombre": "Salsa roja" } ] },
+            { "id": "proteina", "nombre": "Proteína",
+              "valores": [ { "id": "pollo", "nombre": "Pollo" }, { "id": "huevo", "nombre": "Huevo" } ] } ] },
+        { "id": "torta-de-chilaquiles", "nombre": "Torta de chilaquiles", "descripcion": "Salsa a tu elección (verde o roja) terminados con crema, queso fresco, cilantro y cebolla.", "precios": { "unico": 58 },
+          "opciones": [ { "id": "salsa", "nombre": "Salsa",
+            "valores": [ { "id": "verde", "nombre": "Salsa verde" }, { "id": "roja", "nombre": "Salsa roja" } ] } ] }
+      ]
+    },
+    {
+      "id": "antojos-dulces", "nombre": "Antojos Dulces", "grupo": "comida",
+      "productos": [
+        { "id": "pan-frances", "nombre": "Pan Francés", "detalle": "2 pz", "descripcion": "Pan brioche dorado, miel y frutos rojos frescos.", "precios": { "unico": 98 } },
+        { "id": "galletas-ny", "nombre": "Galletas NY", "precios": { "unico": 35 },
+          "opciones": [ { "id": "sabor", "nombre": "Sabor",
+            "valores": [ { "id": "chocolate", "nombre": "Chocolate" }, { "id": "vainilla", "nombre": "Vainilla" }, { "id": "red-velvet", "nombre": "Red Velvet" } ] } ] }
+      ]
+    }
+  ]
+}

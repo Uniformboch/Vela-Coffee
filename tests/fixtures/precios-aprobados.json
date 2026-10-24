@@ -1,0 +1,73 @@
+{
+  "_nota": "Copia de la tabla de precios aprobada por Vela Coffee el 24 oct 2026 (menú impreso). Si el café cambia un precio desde el panel, esto no se toca: estas pruebas solo protegen el contenido inicial del repositorio.",
+  "extras": {
+    "Leche vegetal": 12, "Cambio de vaso a lata": 12,
+    "Pollo extra": 25, "Huevo extra": 25, "Pavo extra": 25, "Queso extra": 25,
+    "Aguacate extra": 20, "Chorizo extra": 20
+  },
+  "categorias": {
+    "Clásicas": {
+      "Espresso": { "C": 40 },
+      "Americano": { "C": 45, "F": 55 },
+      "Latte": { "C": 58, "F": 68 },
+      "Latte vainilla": { "C": 68, "F": 78 },
+      "Mint Latte": { "F": 78 },
+      "Horchata latte": { "F": 78 },
+      "Capuccino": { "C": 58, "F": 68 },
+      "Moka": { "C": 68, "F": 78 },
+      "Chocolate": { "C": 58, "F": 68 }
+    },
+    "Special Drinks": {
+      "Matcha": { "C": 68, "F": 78 },
+      "Taro": { "C": 68, "F": 78 },
+      "Golden Milk": { "C": 68, "F": 78 },
+      "Chai": { "C": 68, "F": 78 },
+      "Dirty Chai": { "C": 78 },
+      "Café Filtrado V60": { "C": 98 },
+      "Smoothie Frutos Rojos": { "F": 78 }
+    },
+    "Cold Foam Drinks": {
+      "Cloud Matcha Coconut": { "unico": 98 },
+      "Cloud Taro Coconut": { "unico": 98 },
+      "Cloud Mango Coconut": { "unico": 98 },
+      "Vainilla Foam Latte": { "unico": 88 },
+      "Banana Foam Latte": { "unico": 88 },
+      "Lotus Foam Latte": { "unico": 88 },
+      "Strawberry Matcha": { "unico": 98 }
+    },
+    "To Go": {
+      "Cold Brew": { "unico": 68 },
+      "Choco Chía": { "unico": 68 },
+      "Smoothie Mango Chamoy": { "unico": 68 },
+      "Espresso tonic": { "unico": 88 },
+      "Mint Vela": { "unico": 78 },
+      "Strawberry Latte": { "unico": 88 },
+      "Velvet Matcha": { "unico": 98 }
+    },
+    "Otros": {
+      "Limonada": { "unico": 48 },
+      "Refresco": { "unico": 35 },
+      "Tisana": { "unico": 58 }
+    },
+    "Healthy": {
+      "Avena Hidratada": { "unico": 68 },
+      "Avocado Toast": { "unico": 108 },
+      "Ensalada Thai": { "unico": 108 }
+    },
+    "Bocados Vela": {
+      "Sándwich ligero": { "unico": 118 },
+      "Sándwich Vela": { "unico": 118 },
+      "Molletes": { "unico": 88 },
+      "Croissant de Huevo con Tocino": { "unico": 88 }
+    },
+    "Chilaquiles Vela": {
+      "Chilaquiles Sencillos": { "unico": 88 },
+      "Chilaquiles con proteína": { "unico": 118 },
+      "Torta de chilaquiles": { "unico": 58 }
+    },
+    "Antojos Dulces": {
+      "Pan Francés": { "unico": 98 },
+      "Galletas NY": { "unico": 35 }
+    }
+  }
+}
