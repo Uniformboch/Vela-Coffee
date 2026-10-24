@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vela Coffee · Menú</title>
+<meta name="description" content="Menú de Vela Coffee en León, Gto. Arma tu pedido y envíalo por WhatsApp.">
+<meta name="theme-color" content="#144b95">
+<meta name="color-scheme" content="light">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/assets/icono-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/icono-180.png">
+<link rel="stylesheet" href="/css/menu.css">
+<script type="module" src="/js/menu.mjs"></script>
+</head>
+<body>
+<a class="saltar" href="#menu">Saltar al menú</a>
+
+<header class="portada">
+  <h1 class="menu-titulo"><span class="oculto">Vela Coffee: </span>MENÚ</h1>
+  <img class="logo" src="/assets/logo-vela.png" alt="" width="650" height="1367">
+</header>
+
+<nav class="barra" id="barra" aria-label="Secciones del menú">
+  <div class="barra-interior">
+    <div class="selector" id="selector" role="group" aria-label="Ver" hidden></div>
+    <div class="chips" id="chips"></div>
+  </div>
+</nav>
+
+<main class="contenido" id="menu" tabindex="-1">
+  <p class="estado" id="estado" role="status" aria-live="polite">Cargando menú…</p>
+</main>
+
+<footer class="pie">
+  <div class="pie-interior">
+    <h2 class="pie-titulo">Vela Coffee</h2>
+    <div class="pie-datos">
+      <div>
+        <h3>Dirección</h3>
+        <address>Blvd. del Valle 157a, Jardines de Versalles<br>37170 León de los Aldama, Gto.</address>
+      </div>
+      <div>
+        <h3>Horario</h3>
+        <p>Lunes a sábado 8:00 – 21:00<br>Domingo cerrado</p>
+      </div>
+      <div>
+        <h3>Contacto</h3>
+        <p>Pedidos por WhatsApp: <a id="pie-whatsapp" href="https://wa.me/524771358745">477 135 8745</a><br>
+        Teléfono del café: <a href="tel:+524793152487">479 315 2487</a></p>
+      </div>
+    </div>
+    <div class="pie-botones">
+      <a class="boton-sec" href="https://maps.app.goo.gl/PXvsWX1DhJyEsUC16" target="_blank" rel="noopener">Cómo llegar</a>
+      <a class="boton-sec" href="https://www.instagram.com/velacoffee__/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
