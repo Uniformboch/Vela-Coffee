@@ -11,7 +11,7 @@ const CONTRASENA = 'prueba-correcta-123';
 // Para que las pruebas sean rápidas se usan pocas iteraciones; la de 600 000 se prueba aparte.
 const HASH = await crearHash(CONTRASENA, { iteraciones: 1000 });
 
-function preparar({ secretos = { hash: HASH, clave: 'clave-de-prueba' } } = {}) {
+function preparar({ secretos = { hash: HASH, clave: 'clave-de-prueba-larga-de-mas-de-32-letras' } } = {}) {
   const reloj = { t: Date.UTC(2026, 9, 24, 15, 0, 0) };
   const almacenes = { estado: crearAlmacenMemoria(), fotos: crearAlmacenMemoria(), respaldos: crearAlmacenMemoria(), intentos: crearAlmacenMemoria() };
   const servidor = crearServidor({ almacenes, secretos, inicial: { menu: cargarMenu(), temporada: cargarTemporada() }, ahora: () => reloj.t });
@@ -65,6 +65,24 @@ test('la sesión vence a las 12 horas y no se puede falsificar', () => {
   const [vence, firma] = s.split('.');
   assert.equal(sesionValida('clave', `${Number(vence) + 1000}.${firma}`, t), false);
   assert.equal(sesionValida('clave', 'nada', t), false);
+});
+
+test('valores pegados con espacios, saltos de línea o "VALOR:" funcionan igual', async () => {
+  const partido = `VALOR:   ${HASH.slice(0, 40)}\r\n   ${HASH.slice(40)}  `;
+  const { pedir } = preparar({ secretos: { hash: partido, clave: ' clave-de-prueba-larga-de-mas-de-32-letras \n' } });
+  assert.deepEqual((await pedir('GET', '/api/sesion')).datos, { configurado: true, sesion: false });
+  assert.equal((await pedir('POST', '/api/login', { contrasena: CONTRASENA })).estado, 200);
+});
+
+test('variables mal pegadas: el panel lo explica sin mostrar el valor', async () => {
+  const { pedir } = preparar({ secretos: { hash: HASH.slice(0, 50), clave: 'corta' } });
+  const r = (await pedir('GET', '/api/sesion')).datos;
+  assert.equal(r.configurado, false);
+  assert.equal(r.problemas.length, 2);
+  assert.match(r.problemas[0], /ADMIN_PASSWORD_HASH/);
+  assert.match(r.problemas[1], /SESSION_SECRET/);
+  assert.ok(!JSON.stringify(r).includes(HASH.slice(20, 50)), 'no se muestra el valor');
+  assert.equal((await pedir('POST', '/api/login', { contrasena: CONTRASENA })).estado, 503);
 });
 
 test('sin variables configuradas: el panel lo dice y no deja entrar', async () => {

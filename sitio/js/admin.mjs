@@ -48,7 +48,11 @@ function toast(textoAviso) {
 
 // ---------- Entrar ----------
 function formularioEntrar({ mensaje, alEntrar }) {
-  const input = el('input', { type: 'password', id: nuevoId('contrasena'), autocomplete: 'current-password', maxlength: 200, required: true });
+  // Sin mayúscula automática ni autocorrector: en algunos teclados de celular cambiaban la contraseña.
+  const input = el('input', {
+    type: 'password', id: nuevoId('contrasena'), autocomplete: 'current-password', maxlength: 200, required: true,
+    autocapitalize: 'none', autocorrect: 'off', spellcheck: 'false'
+  });
   const error = el('p', { class: 'error', role: 'alert', hidden: true });
   const boton = el('button', { type: 'submit', class: 'boton-principal' }, 'Entrar');
   let cuenta;
@@ -395,8 +399,10 @@ async function restaurar(respaldo) {
     const s = await api.sesion();
     if (!s.configurado) {
       app.replaceChildren(el('section', { class: 'adm-tarjeta' },
-        el('h2', {}, 'El panel aún no tiene contraseña'),
-        el('p', {}, 'Falta configurar la contraseña del panel en Netlify. Sigue la guía de instalación.')));
+        el('h2', {}, s.problemas ? 'La contraseña del panel quedó mal configurada' : 'El panel aún no tiene contraseña'),
+        s.problemas
+          ? el('ul', {}, s.problemas.map(p => el('li', {}, p)))
+          : el('p', {}, 'Falta configurar la contraseña del panel en Netlify. Sigue la guía de instalación.')));
       return;
     }
     if (s.sesion) await cargar(); else mostrarEntrada();

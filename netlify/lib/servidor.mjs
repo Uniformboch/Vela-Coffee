@@ -3,7 +3,8 @@
 import { randomBytes } from 'node:crypto';
 import { validarMenu } from '../../sitio/js/logica/validar-menu.mjs';
 import {
-  verificarContrasena, crearSesion, sesionValida, leerCookie, cookieSesion, cookieBorrar, sha256, COOKIE
+  verificarContrasena, crearSesion, sesionValida, leerCookie, cookieSesion, cookieBorrar, sha256, COOKIE,
+  normalizarSecreto, hashValido
 } from './seguridad.mjs';
 import { MAX_FOTO, tipoDeImagen, NOMBRE_FOTO } from './imagenes.mjs';
 
@@ -48,9 +49,14 @@ function leerJson(bytes) {
  * secretos: { hash, clave } (ADMIN_PASSWORD_HASH y SESSION_SECRET).
  * inicial: { menu, temporada } del repositorio, mientras no exista nada guardado.
  */
-export function crearServidor({ almacenes, secretos, inicial, ahora = () => Date.now() }) {
+export function crearServidor({ almacenes, secretos: secretosPegados, inicial, ahora = () => Date.now() }) {
   const { estado, fotos, respaldos, intentos } = almacenes;
-  const configurado = Boolean(secretos?.hash && secretos?.clave);
+  const secretos = { hash: normalizarSecreto(secretosPegados?.hash), clave: normalizarSecreto(secretosPegados?.clave) };
+  // Si una variable existe pero quedó mal pegada, el panel lo dice (sin mostrar su valor).
+  const problemas = [];
+  if (secretos.hash && !hashValido(secretos.hash)) problemas.push('La variable ADMIN_PASSWORD_HASH en Netlify no tiene el formato correcto: vuelve a generarla y pégala completa.');
+  if (secretos.clave && secretos.clave.length < 32) problemas.push('La variable SESSION_SECRET en Netlify es demasiado corta: vuelve a generarla y pégala completa.');
+  const configurado = Boolean(secretos.hash && secretos.clave) && problemas.length === 0;
 
   async function leerEstado() {
     const r = await estado.getWithMetadata(CLAVE_ESTADO, { type: 'json' });
@@ -155,7 +161,9 @@ export function crearServidor({ almacenes, secretos, inicial, ahora = () => Date
         if (request.headers.get('x-menu') !== '1' || request.headers.get('origin') !== url.origin) return error(403, 'Solicitud no permitida.');
       }
 
-      if (ruta === '/api/sesion' && metodo === 'GET') return responder(200, { configurado, sesion: haySesion(request) });
+      if (ruta === '/api/sesion' && metodo === 'GET') {
+        return responder(200, { configurado, sesion: haySesion(request), ...(problemas.length ? { problemas } : {}) });
+      }
       if (ruta === '/api/login' && metodo === 'POST') return await login(request, bytes, ip);
       if (ruta === '/api/logout' && metodo === 'POST') return responder(200, { ok: true }, { 'Set-Cookie': cookieBorrar() });
 

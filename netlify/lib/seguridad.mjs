@@ -8,6 +8,20 @@ export const ITERACIONES = 600_000;
 export const DURACION_SESION = 12 * 60 * 60 * 1000; // 12 horas
 export const COOKIE = 'vela_sesion';
 
+/**
+ * Limpia un valor pegado en Netlify: quita espacios y saltos de línea (la terminal parte las líneas largas)
+ * y la palabra "VALOR:" si se copió junto con el valor.
+ */
+export function normalizarSecreto(valor) {
+  return String(valor ?? '').replace(/^\s*VALOR:\s*/i, '').replace(/\s+/g, '');
+}
+
+/** ¿Tiene la forma pbkdf2_sha256$<iteraciones>$<sal>$<hash>? */
+export function hashValido(hash) {
+  const m = /^pbkdf2_sha256\$(\d+)\$([A-Za-z0-9+/]+={0,2})\$([A-Za-z0-9+/]+={0,2})$/.exec(hash);
+  return Boolean(m) && Number(m[1]) >= 1000 && Buffer.from(m[3], 'base64').length === 32;
+}
+
 /** Formato: pbkdf2_sha256$<iteraciones>$<sal base64>$<hash base64> */
 export async function crearHash(contrasena, { iteraciones = ITERACIONES, sal = randomBytes(16) } = {}) {
   const hash = await pbkdf2Async(String(contrasena).normalize('NFC'), sal, iteraciones, 32, 'sha256');
