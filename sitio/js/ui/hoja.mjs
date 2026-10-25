@@ -25,7 +25,7 @@ export function crearHoja({ clase = '', alCerrar } = {}) {
     origen = null;
     alCerrar?.();
     if (volver?.isConnected && !volver.disabled && volver.getClientRects().length) volver.focus();
-    else document.getElementById('menu')?.focus();
+    else document.querySelector('main')?.focus();
   });
 
   return {

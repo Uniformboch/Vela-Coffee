@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#144b95">
+<meta name="color-scheme" content="light">
+<title>Panel · Vela Coffee</title>
+<link rel="icon" href="/assets/icono-192.png" type="image/png">
+<link rel="stylesheet" href="/css/menu.css">
+<link rel="stylesheet" href="/css/admin.css">
+<script type="module" src="/js/admin.mjs"></script>
+</head>
+<body class="admin">
+<header class="adm-cabecera">
+  <div class="adm-interior adm-cabecera-fila">
+    <h1><img src="/assets/icono-192.png" alt="" width="36" height="36"> Panel <span>Vela Coffee</span></h1>
+    <div class="adm-cabecera-botones">
+      <a class="boton-sec boton-chico" href="/" target="_blank" rel="noopener">Ver menú</a>
+      <button type="button" class="boton-sec boton-chico" id="salir" hidden>Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="adm-interior" id="app" tabindex="-1">
+  <p class="estado">Cargando…</p>
+</main>
+
+<div class="adm-barra-guardar" id="barra-guardar" hidden>
+  <div class="adm-interior adm-barra-fila">
+    <span>Tienes cambios sin guardar</span>
+    <button type="button" class="boton-sec boton-chico" id="descartar">Descartar</button>
+    <button type="button" class="boton-principal" id="guardar">Guardar</button>
+  </div>
+</div>
+
+<p class="oculto" id="avisos" aria-live="polite"></p>
+</body>
+</html>
