@@ -17,8 +17,9 @@ export function campo(etiqueta, control, { nota, opcional = false } = {}) {
     nota ? el('p', { class: 'nota', id: idNota }, nota) : null);
 }
 
-export function texto(valor, { max = 80, placeholder, alEscribir } = {}) {
-  const input = el('input', { type: 'text', maxlength: max, placeholder, autocomplete: 'off', oninput: alEscribir });
+/** etiqueta: nombre para lectores de pantalla cuando el campo no tiene <label> visible. */
+export function texto(valor, { max = 80, placeholder, etiqueta, alEscribir } = {}) {
+  const input = el('input', { type: 'text', maxlength: max, placeholder, 'aria-label': etiqueta, autocomplete: 'off', oninput: alEscribir });
   input.value = valor ?? '';
   return input;
 }

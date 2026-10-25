@@ -65,7 +65,7 @@ export function crearEditores({ trabajo, alCambiar, alSesionVencida }) {
           campo('Nombre de la opción', texto(g.nombre, { max: 40, placeholder: 'Ej. Salsa', alEscribir: e => { g.nombre = e.target.value; } })),
           el('p', { class: 'adm-sub' }, 'Valores (precio extra opcional)'),
           el('ul', { class: 'adm-valores' }, g.valores.map((v, vi) => el('li', {},
-            texto(v.nombre, { max: 40, placeholder: `Valor ${vi + 1}`, alEscribir: e => { v.nombre = e.target.value; } }),
+            texto(v.nombre, { max: 40, placeholder: `Valor ${vi + 1}`, etiqueta: `Valor ${vi + 1} de la opción`, alEscribir: e => { v.nombre = e.target.value; } }),
             entradaPrecio(v.precio, { placeholder: '+$', 'aria-label': `Precio extra del valor ${vi + 1}`, oninput: e => { v.precio = e.target.value; } }),
             el('button', {
               type: 'button', class: 'boton-icono', 'aria-label': `Quitar valor ${vi + 1}`,

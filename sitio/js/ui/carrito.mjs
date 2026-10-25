@@ -55,11 +55,15 @@ export function crearCarrito({ datos, anunciar }) {
   // En computadora el carrito vive en el panel; en celular, dentro de la hoja.
   const escritorio = matchMedia('(min-width: 1024px)');
   function ubicar() {
-    if (escritorio.matches) { hoja.cerrar(); panel.append(contenido); }
-    else hoja.cuerpo.append(contenido);
+    const destino = escritorio.matches ? panel : hoja.cuerpo;
+    if (contenido.parentElement === destino) return;
+    if (escritorio.matches) hoja.cerrar();
+    destino.append(contenido);
     dibujar();
   }
-  escritorio.addEventListener('change', ubicar);
+  // El evento "change" no siempre llega (iOS antiguos, algunos cambios de tamaño): se revisa también al redimensionar.
+  escritorio.addEventListener?.('change', ubicar);
+  addEventListener('resize', ubicar);
 
   // ---------- Dibujo ----------
   function dibujar({ foco } = {}) {
