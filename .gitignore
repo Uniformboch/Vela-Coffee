@@ -3,3 +3,4 @@ dist/
 .netlify/
 .env
 *.log
+capturas/

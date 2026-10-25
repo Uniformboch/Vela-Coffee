@@ -33,7 +33,7 @@ function tablaBebidas(menu, categoria, alElegir) {
       el('td', {},
         el('button', {
           type: 'button', class: 'fila-boton', disabled: !!p.agotado,
-          onclick: () => alElegir(p, categoria)
+          onclick: e => alElegir(p, categoria, e.currentTarget)
         },
         p.nombre, detalle(p), etiquetaAgotado(p),
         p.descripcion ? el('span', { class: 'fila-desc' }, p.descripcion) : null)),
@@ -49,7 +49,7 @@ function tablaBebidas(menu, categoria, alElegir) {
 function listaComida(categoria, alElegir) {
   return el('ul', { class: 'platillos' }, productosVisibles(categoria).map(p =>
     el('li', {},
-      el('button', { type: 'button', class: 'platillo', disabled: !!p.agotado, onclick: () => alElegir(p, categoria) },
+      el('button', { type: 'button', class: 'platillo', disabled: !!p.agotado, onclick: e => alElegir(p, categoria, e.currentTarget) },
         el('span', { class: 'linea' },
           el('span', {}, p.nombre, detalle(p), etiquetaAgotado(p)),
           el('span', { class: 'precio' }, formatoPrecio(Math.min(...Object.values(p.precios))))),
@@ -58,7 +58,7 @@ function listaComida(categoria, alElegir) {
 
 function tarjetasTemporada(categoria, alElegir) {
   return el('div', { class: 'tarjetas' }, productosVisibles(categoria).map(p =>
-    el('button', { type: 'button', class: 'tarjeta', disabled: !!p.agotado, onclick: () => alElegir(p, categoria) },
+    el('button', { type: 'button', class: 'tarjeta', disabled: !!p.agotado, onclick: e => alElegir(p, categoria, e.currentTarget) },
       p.imagen
         ? el('img', { class: 'tarjeta-foto', src: `/${p.imagen}`, alt: '', loading: 'lazy', decoding: 'async', width: 400, height: 300 })
         : null,

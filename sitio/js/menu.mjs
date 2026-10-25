@@ -3,8 +3,18 @@ import { el } from './ui/dom.mjs';
 import { armarVista, formatoTelefono } from './logica/vista.mjs';
 import { dibujarMenu } from './ui/render-menu.mjs';
 import { iniciarNavegacion } from './ui/navegacion.mjs';
+import { crearHojaProducto } from './ui/hoja-producto.mjs';
+import { crearCarrito } from './ui/carrito.mjs';
 
 const contenedor = document.getElementById('menu');
+const avisos = document.getElementById('avisos');
+let datos = null; // { menu, temporada }
+
+// Avisos para lectores de pantalla (se vacía y se vuelve a llenar para que siempre se lea).
+function anunciar(texto) {
+  avisos.textContent = '';
+  setTimeout(() => { avisos.textContent = texto; }, 50);
+}
 
 async function pedirJson(ruta) {
   const r = await fetch(ruta, { cache: 'no-store' });
@@ -12,9 +22,9 @@ async function pedirJson(ruta) {
   return r.json();
 }
 
-// La hoja de producto llega en la etapa 5; por ahora tocar un producto no hace nada.
-function alElegir(producto, categoria) {
-  document.dispatchEvent(new CustomEvent('menu:elegir', { detail: { producto, categoria } }));
+let hojaProducto = null;
+function alElegir(producto, categoria, origen) {
+  hojaProducto?.abrir(producto, categoria, origen);
 }
 
 function mostrarError() {
@@ -37,6 +47,10 @@ async function cargar() {
     console.warn('No se pudo cargar el menú', e);
     return mostrarError();
   }
+
+  datos = { menu, temporada };
+  const carrito = crearCarrito({ datos: () => datos, anunciar });
+  hojaProducto = crearHojaProducto({ datos: () => datos, alAgregar: linea => carrito.agregar(linea) });
 
   const vista = armarVista(menu, temporada);
   const secciones = dibujarMenu(contenedor, menu, vista, alElegir);
