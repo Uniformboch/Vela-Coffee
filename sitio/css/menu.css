@@ -1,4 +1,19 @@
 /* Menú público de Vela Coffee. Colores medidos del impreso y del logo (etapa 2). */
+
+/* Letras incluidas en el sitio (licencias en /fonts/LICENCIAS.txt) */
+@font-face {
+  font-family: "Ultra";
+  src: url("/fonts/ultra.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat.woff2") format("woff2");
+  font-weight: 400 800;
+  font-display: swap;
+}
+
 :root {
   --azul-marino: #144b95;
   --azul-logo: #0079d4;
@@ -10,7 +25,7 @@
   --linea: rgba(20, 75, 149, .15);
   --fondo-hover: rgba(20, 75, 149, .06);
 
-  --letra-titulo: "Arial Black", "Segoe UI Black", Impact, sans-serif;
+  --letra-titulo: Ultra, "Arial Black", "Segoe UI Black", Impact, serif;
   --letra-texto: Montserrat, "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
 
   --ancho: 720px;
@@ -68,7 +83,7 @@ a { color: inherit; }
 }
 .menu-titulo {
   margin: 0; line-height: 1;
-  font-family: var(--letra-titulo); font-weight: 900;
+  font-family: var(--letra-titulo); font-weight: 400; font-synthesis: none;
   font-size: clamp(44px, 14vw, 84px); letter-spacing: .02em;
   /* Rayas claras horizontales, como en el impreso */
   background: repeating-linear-gradient(180deg, var(--azul-marino) 0 5px, #3d6aad 5px 6px);

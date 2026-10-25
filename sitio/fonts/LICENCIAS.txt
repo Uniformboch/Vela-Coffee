@@ -1,0 +1,8 @@
+Letras incluidas en este sitio (descargadas de Google Fonts, subconjunto "latin"):
+
+- montserrat.woff2 — Montserrat. Copyright 2011 The Montserrat Project Authors
+  (https://github.com/JulietaUla/Montserrat).
+- ultra.woff2 — Ultra. Copyright (c) 2010 by Brian J. Bonislawsky DBA Astigmatic (AOETI).
+
+Ambas se distribuyen bajo la SIL Open Font License, versión 1.1:
+https://openfontlicense.org
