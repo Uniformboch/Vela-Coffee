@@ -339,7 +339,7 @@ dialog.hoja::backdrop { background: rgba(10, 30, 60, .45); }
 .barra-carrito {
   position: fixed; z-index: 30;
   left: var(--margen); right: var(--margen);
-  bottom: calc(var(--espacio-proveedor) + env(safe-area-inset-bottom));
+  bottom: calc(var(--espacio-proveedor) + 8px + env(safe-area-inset-bottom));
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   min-height: 52px; padding: 0 18px; border: 0; border-radius: 14px;
   background: var(--azul-marino); color: var(--blanco); font-weight: 700; font-size: 16px;
