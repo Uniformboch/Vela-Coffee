@@ -2,7 +2,8 @@
 // Pide la contraseña sin mostrarla en pantalla y NO la guarda en ningún archivo.
 // Uso: node scripts/generar-secretos.mjs
 import { createInterface } from 'node:readline';
-import { crearHash, claveAleatoria } from '../netlify/lib/seguridad.mjs';
+import { spawnSync } from 'node:child_process';
+import { crearHash, claveAleatoria, hashValido, verificarContrasena } from '../netlify/lib/seguridad.mjs';
 
 const MINIMO = 10;
 
@@ -32,10 +33,41 @@ if (primera !== segunda) {
 
 console.log('\nCalculando (tarda unos segundos)…');
 const hash = await crearHash(primera);
+// Comprobación: el valor generado sí abre con la contraseña escrita.
+if (!hashValido(hash) || !(await verificarContrasena(primera, hash))) {
+  console.error('Algo salió mal al generar el valor. Vuelve a correr el script.');
+  process.exit(1);
+}
 
-console.log('\nCopia cada VALOR en Netlify, en la variable con ese NOMBRE (Key):\n');
-console.log('NOMBRE (Key):  ADMIN_PASSWORD_HASH');
-console.log(`VALOR:         ${hash}\n`);
-console.log('NOMBRE (Key):  SESSION_SECRET');
-console.log(`VALOR:         ${claveAleatoria()}\n`);
-console.log('No compartas estos valores. Cierra esta ventana cuando termines.');
+// Copia al portapapeles: así no se cuelan saltos de línea ni espacios al seleccionar en la terminal.
+function copiar(texto) {
+  const comandos = { win32: ['clip', []], darwin: ['pbcopy', []], linux: ['xclip', ['-selection', 'clipboard']] };
+  const [cmd, args] = comandos[process.platform] ?? [];
+  if (!cmd) return false;
+  return spawnSync(cmd, args, { input: texto }).status === 0;
+}
+
+function preguntar(texto) {
+  return new Promise(resolver => {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    rl.question(texto, r => { rl.close(); resolver(r); });
+  });
+}
+
+const variables = [['ADMIN_PASSWORD_HASH', hash], ['SESSION_SECRET', claveAleatoria()]];
+console.log('\nVas a crear (o reemplazar) dos variables en Netlify. Para cada una:');
+console.log('el NOMBRE (Key) se escribe tal cual, y el VALOR se pega desde el portapapeles.\n');
+for (const [nombre, valor] of variables) {
+  console.log(`NOMBRE (Key):  ${nombre}`);
+  await preguntar('Presiona Enter para copiar su VALOR al portapapeles… ');
+  if (copiar(valor)) {
+    console.log(`Copiado (${valor.length} caracteres). Pégalo en el campo "Value" de ${nombre} en Netlify.`);
+  } else {
+    console.log('No se pudo usar el portapapeles. Copia este VALOR completo, en una sola línea:');
+    console.log(valor);
+  }
+  await preguntar('Presiona Enter cuando ya lo hayas pegado y guardado en Netlify… ');
+  console.log('');
+}
+copiar(' '); // se vacía el portapapeles para no dejar el valor ahí
+console.log('Listo. No compartas estos valores. Ya puedes cerrar esta ventana.');
