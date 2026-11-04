@@ -4,7 +4,7 @@ import { randomBytes } from 'node:crypto';
 import { validarMenu } from '../../sitio/js/logica/validar-menu.mjs';
 import {
   verificarContrasena, crearSesion, sesionValida, leerCookie, cookieSesion, cookieBorrar, sha256, COOKIE,
-  normalizarSecreto, hashValido
+  normalizarSecreto, hashValido, describirValor
 } from './seguridad.mjs';
 import { MAX_FOTO, tipoDeImagen, NOMBRE_FOTO } from './imagenes.mjs';
 
@@ -54,7 +54,9 @@ export function crearServidor({ almacenes, secretos: secretosPegados, inicial, a
   const secretos = { hash: normalizarSecreto(secretosPegados?.hash), clave: normalizarSecreto(secretosPegados?.clave) };
   // Si una variable existe pero quedó mal pegada, el panel lo dice (sin mostrar su valor).
   const problemas = [];
-  if (secretos.hash && !hashValido(secretos.hash)) problemas.push('La variable ADMIN_PASSWORD_HASH en Netlify no tiene el formato correcto: vuelve a generarla y pégala completa.');
+  if (secretos.hash && !hashValido(secretos.hash)) {
+    problemas.push(`La variable ADMIN_PASSWORD_HASH en Netlify no tiene el formato correcto (${describirValor(secretos.hash)}): vuelve a generarla y pégala completa.`);
+  }
   if (secretos.clave && secretos.clave.length < 32) problemas.push('La variable SESSION_SECRET en Netlify es demasiado corta: vuelve a generarla y pégala completa.');
   const configurado = Boolean(secretos.hash && secretos.clave) && problemas.length === 0;
 

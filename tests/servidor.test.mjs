@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { cargarMenu, cargarTemporada } from './ayuda.mjs';
 import { crearServidor, MAX_RESPALDOS } from '../netlify/lib/servidor.mjs';
 import { crearAlmacenMemoria } from '../netlify/lib/almacen-memoria.mjs';
-import { crearHash, verificarContrasena, ITERACIONES, crearSesion, sesionValida, DURACION_SESION } from '../netlify/lib/seguridad.mjs';
+import { crearHash, verificarContrasena, ITERACIONES, crearSesion, sesionValida, DURACION_SESION, hashValido, normalizarSecreto, describirValor } from '../netlify/lib/seguridad.mjs';
 
 const ORIGEN = 'https://vela.example';
 const CONTRASENA = 'prueba-correcta-123';
@@ -49,11 +49,37 @@ const WEBP = new Uint8Array([...'RIFF'].map(c => c.charCodeAt(0)).concat([0, 0, 
 
 test('el hash usa PBKDF2-SHA256 con 600 000 iteraciones y no guarda la contraseña', async () => {
   const hash = await crearHash('una-contraseña-larga');
-  assert.match(hash, new RegExp(`^pbkdf2_sha256\\$${ITERACIONES}\\$`));
+  assert.match(hash, new RegExp(`^pbkdf2-sha256\\.${ITERACIONES}\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]{43}$`));
+  // Sin caracteres que puedan alterarse al pegar en Netlify
+  assert.ok(!/[$+/=\s"']/.test(hash));
   assert.ok(!hash.includes('una-contraseña-larga'));
   assert.equal(await verificarContrasena('una-contraseña-larga', hash), true);
   assert.equal(await verificarContrasena('otra', hash), false);
   assert.equal(await verificarContrasena('x', 'basura'), false);
+});
+
+test('el formato anterior con "$" se sigue aceptando', async () => {
+  const sal = Buffer.from('0123456789abcdef');
+  const nuevo = await crearHash('contraseña-vieja', { iteraciones: 1000, sal });
+  const [, it, s, h] = nuevo.split('.');
+  const viejo = `pbkdf2_sha256$${it}$${Buffer.from(s, 'base64url').toString('base64')}$${Buffer.from(h, 'base64url').toString('base64')}`;
+  assert.ok(hashValido(viejo));
+  assert.equal(await verificarContrasena('contraseña-vieja', viejo), true);
+  assert.equal(await verificarContrasena('otra', viejo), false);
+});
+
+test('se rescata el hash aunque se pegue con el nombre, "VALOR:" o comillas', async () => {
+  for (const pegado of [`"${HASH}"`, `NOMBRE (Key):  ADMIN_PASSWORD_HASH\nVALOR:         ${HASH}`, `'${HASH}' `]) {
+    assert.equal(normalizarSecreto(pegado), HASH, pegado);
+  }
+});
+
+test('un valor alterado al pegar se describe sin revelarlo', () => {
+  // Así quedaría el formato viejo si el sistema sustituyera "$600000" y lo demás
+  const alterado = 'pbkdf2_sha25600000';
+  assert.equal(hashValido(alterado), false);
+  const d = describirValor(alterado);
+  assert.match(d, /18 caracteres, 0 signos "\$" y 0 puntos/);
 });
 
 test('la sesión vence a las 12 horas y no se puede falsificar', () => {

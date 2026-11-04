@@ -8,32 +8,51 @@ export const ITERACIONES = 600_000;
 export const DURACION_SESION = 12 * 60 * 60 * 1000; // 12 horas
 export const COOKIE = 'vela_sesion';
 
+// Formato actual: pbkdf2-sha256.<iteraciones>.<sal base64url>.<hash base64url> (sin "$", que algunos sistemas
+// sustituyen al pegar). También se acepta el formato anterior: pbkdf2_sha256$<iteraciones>$<sal>$<hash>.
+const FORMATO_HASH = /pbkdf2[-_]sha256([.$])(\d+)\1([A-Za-z0-9+/_-]+={0,2})\1([A-Za-z0-9+/_-]+={0,2})/;
+
+function partesHash(valor) {
+  const m = new RegExp(`^${FORMATO_HASH.source}$`).exec(valor);
+  return m ? { iteraciones: Number(m[2]), sal: Buffer.from(m[3], 'base64'), hash: Buffer.from(m[4], 'base64') } : null;
+}
+
 /**
- * Limpia un valor pegado en Netlify: quita espacios y saltos de línea (la terminal parte las líneas largas)
- * y la palabra "VALOR:" si se copió junto con el valor.
+ * Limpia un valor pegado en Netlify: quita espacios, saltos de línea y comillas, y si hay texto alrededor
+ * (por ejemplo "VALOR:" o el nombre de la variable) se queda solo con el hash.
  */
 export function normalizarSecreto(valor) {
-  return String(valor ?? '').replace(/^\s*VALOR:\s*/i, '').replace(/\s+/g, '');
+  const limpio = String(valor ?? '').replace(/\s+/g, '').replace(/^VALOR:/i, '').replace(/^["'`]+|["'`]+$/g, '');
+  return FORMATO_HASH.exec(limpio)?.[0] ?? limpio;
 }
 
-/** ¿Tiene la forma pbkdf2_sha256$<iteraciones>$<sal>$<hash>? */
+/** ¿Tiene la forma de un hash creado por crearHash? */
 export function hashValido(hash) {
-  const m = /^pbkdf2_sha256\$(\d+)\$([A-Za-z0-9+/]+={0,2})\$([A-Za-z0-9+/]+={0,2})$/.exec(hash);
-  return Boolean(m) && Number(m[1]) >= 1000 && Buffer.from(m[3], 'base64').length === 32;
+  const p = partesHash(hash);
+  return Boolean(p) && p.iteraciones >= 1000 && p.sal.length >= 8 && p.hash.length === 32;
 }
 
-/** Formato: pbkdf2_sha256$<iteraciones>$<sal base64>$<hash base64> */
+/** Descripción del valor recibido que ayuda a ver qué se cortó, sin revelar el secreto. */
+export function describirValor(valor) {
+  const v = String(valor ?? '');
+  const signos = (v.match(/[$]/g) ?? []).length;
+  const puntos = (v.match(/[.]/g) ?? []).length;
+  return `llegó con ${v.length} caracteres, ${signos} signos "$" y ${puntos} puntos; se esperaban 87 caracteres y 3 puntos`;
+}
+
+/** Formato: pbkdf2-sha256.<iteraciones>.<sal base64url>.<hash base64url> */
 export async function crearHash(contrasena, { iteraciones = ITERACIONES, sal = randomBytes(16) } = {}) {
   const hash = await pbkdf2Async(String(contrasena).normalize('NFC'), sal, iteraciones, 32, 'sha256');
-  return `pbkdf2_sha256$${iteraciones}$${sal.toString('base64')}$${hash.toString('base64')}`;
+  return `pbkdf2-sha256.${iteraciones}.${sal.toString('base64url')}.${hash.toString('base64url')}`;
 }
 
 export async function verificarContrasena(contrasena, guardado) {
-  const [algoritmo, iteraciones, sal, hash] = String(guardado ?? '').split('$');
-  if (algoritmo !== 'pbkdf2_sha256' || !/^\d+$/.test(iteraciones ?? '') || !sal || !hash) return false;
-  const esperado = Buffer.from(hash, 'base64');
+  const partes = partesHash(String(guardado ?? ''));
+  if (!partes || !partes.sal.length) return false;
+  const { iteraciones, sal } = partes;
+  const esperado = partes.hash;
   if (!esperado.length) return false;
-  const calculado = await pbkdf2Async(String(contrasena).normalize('NFC'), Buffer.from(sal, 'base64'), Number(iteraciones), esperado.length, 'sha256');
+  const calculado = await pbkdf2Async(String(contrasena).normalize('NFC'), sal, iteraciones, esperado.length, 'sha256');
   return timingSafeEqual(calculado, esperado);
 }
 
